@@ -1,0 +1,129 @@
+MySQL Practical [dynamic fields]
+
+
+-- show databases
+show databases;
+
+-- create database 
+create database [databasename];
+example: create database friends;
+
+-- drop database
+drop database [databasename];
+example: drop database friends;
+
+-- switch to database current database
+use [databasename];
+example: use friends;
+
+-- create table
+create table [tablename](col1 coltype(size) extra ...);
+example: create table personal(id int(9)primary key, name varchar(255), city varchar(255), PhoneNum varchar(255));
+
+-- drop column
+alter table [tablename] DROP column [columnname];
+example: alter table personal DROP COLUMN PhoneNum;
+
+--show all tables
+show tables;
+
+--describe table
+desc persons;
+
+--table alter if you have to add COLUMN then use add
+alter table [tablename] ADD [column name] datatype;
+example: alter table personal ADD PhoneNum varchar(10);
+
+-- modify column
+alter table [tablename] MODIFY [column name] [datatype];
+example: alter table personal MODIFY PhoneNum varchar(15) NOT NULL;
+
+-- modify column datatype
+alter table [tablename] MODIFY [column name] [new datatype];
+example: alter table personal MODIFY PhoneNum int(10);
+
+-- rename column
+alter table [tablename] RENAME COLUMN [old column name] TO [new column name];
+example: alter table personal RENAME COLUMN PhoneNum to personal_phone;
+
+-- insert data to table
+insert into [tablename] (columns) values (values);
+example: insert into personal(id, name, city, personal_phone) values(2, 'Ankit Kumar', 'Goa', 1234);
+		 insert into personal values (3, 'vishal singh', 'Gorakhpur','26762'),(4, 'Shashank Raj', 'Patna', 84389),(6, 'Nishant Ranjan', 'Patna', 898777 );
+
+-- update
+insert into personal values(5, 'Ankit Kumar', 'Goa', 6387783);
+UPDATE [tablename] set Col1=value, col2=value, col3=value ... where Id=5;
+UPDATE personal set city='Lucknow', name= 'Ankit Tiwari' where id=5;
+
+-- delete
+insert into personal values(7, 'bhanu', 'Mumbai', 89894);
+DELETE from [tablename] where id=?(condition);
+DELETE from personal where id=7;
+
+--alias
+select * from personal;(select all from table)
+select name from personal;
+select name, city from personal;
+
+select name as person_name, city as persona_city from personal;
+select name as 'person name', city as 'person city' from personal;
+select name 'person name', city 'person city' from personal;
+
+select p.name, p.city, p.id from personal p;(p is alias of personal table, when you have multiple tables)
+ 
+-- condition AND OR
+select * from personal WHERE name='Ankit Kumar';
+select * from personal WHERE city='Goa';
+select * from personal WHERE name='Ankit Kumar' AND city='Goa';
+select * from personal WHERE name='Ankit Kumar' AND city='Goa' AND id=2;
+select * from personal WHERE city='Patna';
+select * from personal WHERE NOT city='Patna';
+
+
+-- Order By
+select * from personal ORDER BY name;
+select * from personal ORDER BY name desc;
+select * from personal ORDER BY name, city desc;
+
+--limit
+select * from personal limit 3;
+select * from personal ORDER by name limit 3;
+
+--offset
+select * from personal limit 3 offset 1;
+select * from personal order by name limit 3 offset 2;
+
+-- ADD, SUM, COUNT
+update personal set balance =3000 where id = 2;
+update personal set balance =4000 where id = 3;
+update personal set balance =5000 where id = 4;
+update personal set balance =5000 where id = 5;
+update personal set balance =7000 where id = 6;
+select COUNT(id) from personal;
+Result : 5
+select COUNT(id) 'total entry' from personal;
+Result : 5(with new alias)
+select COUNT(id) 'total entry' from personal where city='Patna';
+Result : 2 
+
+select SUM(balance) from personal;
+Result: 24000
+
+
+alter table personal ADD Balance int(10);
+update personal SET balance 
+
+
+
+
+--delete all entry
+truncate [tablename];
+example: truncate persons;
+
+
+
+
+
+
+

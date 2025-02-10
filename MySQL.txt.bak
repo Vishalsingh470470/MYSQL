@@ -1,0 +1,15 @@
+MySQL Notes
+
+One of the problem is 
+
+Problem in File System
+
+1) Data Redundancy: When we store similar data at different location of a computer, data get duplicated and this will lead to data redundancy.
+	This will increase the storage size and also leads the failure of security features because of this file system is highly vulnerable in nature. 
+	Data redundancy will cost user not only in term of security but also economically.
+
+2) Limited Data Sharing And Lack Of Security: Data sharing and security are closely related, sharing data among users introduces a lot security risks.
+	In terms of spread sheet data and other documents the inbuilt file system programs only the basic security option but they are not used most of the time 
+	because of the negligence we might face bigger problems in the near future.
+	
+3) Difficulty Of Getting Quick Answers: This is one of the major problem in File System because File  didn't allow 

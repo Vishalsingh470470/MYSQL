@@ -1,0 +1,139 @@
+MYSQL Stored Procedure
+
+create database user
+
+what is stored procedure?
+
+Advantages
+	Reduce Network traffic, no need to send lengthy lengthy queries from client
+	Database server has all business logic
+	Database become more secure
+	
+	
+create database learn;
+	
+	
+
+--Changing default delimiter
+	delimiter // -- now delimiter is '//' instead of ';'
+
+--Creating Stored Procedure
+	create procedure CreateUserTable()
+    begin
+    create table if not exists users(
+    user_id int auto_increment primary key,
+    first_name varchar(255),
+    last_name varchar(255),
+    city varchar(255)
+    );
+    insert into users(first_name, last_name,city) values('vishal', 'singh', 'Gorakhpur');
+    insert into users(first_name, last_name, city) values('Ankit', 'Kumar','Goa');
+    select * from users;
+    end //
+	
+-- call stored procedure
+	call CreateUserTable()//
+	
+--change delimiter 
+	delimiter ;
+	
+	
+
+
+Variables
+	Declare [variable_name] datatype(size) [default value];
+	set variableName = value;
+	
+	create procedure CountItems()
+    begin
+    declare Tcount int default 0;
+    select count(*) into Tcount from users;
+    select Tcount;
+    end //
+	
+	delimiter ;
+
+	call CountItems();
+	Result:
+		+--------+
+		| Tcount |
+		+--------+
+		|      2 |
+		+--------+
+		
+	insert into users(first_name, last_name, city) values('Shashank', 'raj', 'patna');
+	call CountItems();
+	Result:
+		+--------+
+		| Tcount |
+		+--------+
+		|      3 |
+		+--------+
+
+-- parameter- IN, OUT, INOUT
+	IN- by default
+	OUT-
+	INOUT-
+	
+	delimiter //
+	create procedure SelectByLast(IN l_name varchar(255))
+	begin
+	select * from users where last_name=l_name;
+	end //
+	
+	call SelectByLast("Singh")//
+	Result:
+		+---------+------------+-----------+-----------+
+		| user_id | first_name | last_name | city      |
+		+---------+------------+-----------+-----------+
+		|       1 | vishal     | singh     | Gorakhpur |
+		+---------+------------+-----------+-----------+
+		
+		
+	create procedure CountByLast(IN l_name varchar(255), OUT count_l int)
+    begin
+    select count(*) into count_l from users where last_name=l_name;
+    end //
+	
+	call CountByLast('kumar', @countLast)//
+	
+	select @countlast//
+	Result:
+		+------------+
+		| @countlast |
+		+------------+
+		|          1 |
+		+------------+
+
+
+
+
+-- Alter Procedure
+
+
+
+--Listing Stored Procedure
+
+ show procedure status where db='learn';
+ Result:
+	+-------+-----------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+	| Db    | Name            | Type      | Definer        | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
+	+-------+-----------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+	| learn | CountByLast     | PROCEDURE | root@localhost | 2025-02-05 18:15:03 | 2025-02-05 18:15:03 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+	| learn | CountItems      | PROCEDURE | root@localhost | 2025-02-05 14:38:48 | 2025-02-05 14:38:48 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+	| learn | CreateUserTable | PROCEDURE | root@localhost | 2025-02-05 10:53:38 | 2025-02-05 10:53:38 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+	| learn | SelectByLast    | PROCEDURE | root@localhost | 2025-02-05 18:07:31 | 2025-02-05 18:07:31 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+	+-------+-----------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+	
+-- Drop stored procedure	
+DROP procedure CountBylast;
+
+show procedure status where db='learn';
+Result:
+	+-------+-----------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+	| Db    | Name            | Type      | Definer        | Modified            | Created             | Security_type | Comment | character_set_client | collation_connection | Database Collation |
+	+-------+-----------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+
+	| learn | CountItems      | PROCEDURE | root@localhost | 2025-02-05 14:38:48 | 2025-02-05 14:38:48 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+	| learn | CreateUserTable | PROCEDURE | root@localhost | 2025-02-05 10:53:38 | 2025-02-05 10:53:38 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+	| learn | SelectByLast    | PROCEDURE | root@localhost | 2025-02-05 18:07:31 | 2025-02-05 18:07:31 | DEFINER       |         | cp850                | cp850_general_ci     | utf8mb4_0900_ai_ci |
+	+-------+-----------------+-----------+----------------+---------------------+---------------------+---------------+---------+----------------------+----------------------+--------------------+

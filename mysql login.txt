@@ -1,0 +1,7 @@
+MYSQL LOGIN:
+Port Number :3306 xprotocall port Number:33060
+
+user : root
+password :root
+
+Windows Service Name : MySQL800

@@ -1,0 +1,301 @@
+String Functions
+
+
+-- Length function
+LENGTH(str);
+select length('learn mysql with vishal');
+Result: 23
+
+
+select name 'personal name', length(name) "Length"from personal;
+Result:
+	+----------------+--------+
+	| personal name  | Length |
+	+----------------+--------+
+	| Ankit Kumar    |     11 |
+	| vishal singh   |     12 |
+	| Shashank Raj   |     12 |
+	| Ankit Tiwari   |     12 |
+	| Nishant Ranjan |     14 |
+	| aakash singh   |     12 |
+	+----------------+--------+
+	
+-- CONCATINATION function
+CONCATE(str1,str2)
+select CONCAT('learn mysql', ' with VIshal') 'CONCATINATION';
+Result:
+	+-------------------------+
+	| CONCATINATION           |
+	+-------------------------+
+	| learn mysql with VIshal |
+	+-------------------------+
+	
+select CONCAT(name,'---->', city,'---->',balance) 'Concatination'from personal;
+Result:
+	+-------------------------------------+
+	| Concatination                       |
+	+-------------------------------------+
+	| Ankit Kumar---->Goa---->3000        |
+	| vishal singh---->Gorakhpur---->4000 |
+	| Shashank Raj---->Patna---->5000     |
+	| Ankit Tiwari---->Lucknow---->5000   |
+	| Nishant Ranjan---->Patna---->7000   |
+	| aakash singh---->gorakhpur---->9000 |
+	+-------------------------------------+
+
+-- UPPER case
+select UCASE('learn mysql with vishal');
+Result:
+	+----------------------------------+
+	| UCASE('learn mysql with vishal') |
+	+----------------------------------+
+	| LEARN MYSQL WITH VISHAL          |
+	+----------------------------------+
+	
+-- LOWER case
+select LCASE('LEARN MYSQL WITH VISHAL');
+Result:
+	+----------------------------------+
+	| LCASE('LEARN MYSQL WITH VISHAL') |
+	+----------------------------------+
+	| learn mysql with vishal          |
+	+----------------------------------+
+
+
+--SUBSTRING extract part of the string, counting start with 1 not from 0
+select SUBSTRING('learn mysql with vishal', 1,8);
+	+-------------------------------------------+
+	| SUBSTRING('learn mysql with vishal', 1,8) |
+	+-------------------------------------------+
+	| learn my                                  |
+	+-------------------------------------------+
+	
+-- TRIM Functions remove leading and trailing spaces
+select TRIM('   VISHAL   ') Result;
+Result:
+	+--------+
+	| Result |
+	+--------+
+	| VISHAL |
+	+--------+
+	
+-- Reverse reverse the string;
+select REVERSE ('Reverse');
+Result:
+	+---------------------+
+	| REVERSE ('Reverse') |
+	+---------------------+
+	| esreveR             |
+	+---------------------+
+	1 row in set (0.00 sec)
+	
+-- STRCMP Compare 2 strings
+if Str1 = str2 returns 0
+select STRCMP('AB', 'AB');
+Result:
+	+--------------------+
+	| STRCMP('AB', 'AB') |
+	+--------------------+
+	|                  0 |
+	+--------------------+
+
+if Str1 < str2 returns -1
+select STRCMP('AB', 'AC');
+Result:
+	+--------------------+
+	| STRCMP('AB', 'AC') |
+	+--------------------+
+	|                 -1 |
+	+--------------------+
+
+if Str1 > str2 returns 1
+select STRCMP('Ac', 'AB');
+Result:
+	+--------------------+
+	| STRCMP('Ac', 'AB') |
+	+--------------------+
+	|                  1 |
+	+--------------------+
+	
+-- CURDATE() return the current date
+select CURDATE();
+Result:
+	+------------+
+	| CURDATE()  |
+	+------------+
+	| 2025-01-30 |
+	+------------+
+	
+-- CURTIME() return the current time
+select CURTIME();
+Result:
+	+-----------+
+	| CURTIME() |
+	+-----------+
+	| 12:59:15  |
+	+-----------+
+	
+-- NOW() return the current date and time
+select NOW();
+Result:
+	+---------------------+
+	| NOW()               |
+	+---------------------+
+	| 2025-01-30 13:02:14 |
+	+---------------------+
+	
+--  YEAR() return year from the date
+select YEAR(curdate());
+Result:
+	+-----------------+
+	| YEAR(curdate()) |
+	+-----------------+
+	|            2025 |
+	+-----------------+
+
+select YEAR('2024-12-25');
+Result:
+	+--------------------+
+	| YEAR('2024-12-25') |
+	+--------------------+
+	|               2024 |
+	+--------------------+
+	
+-- If(test, yes, no) return yes if test true else no
+select IF(4<5, 'yes', 'no');
+Result:
+	+----------------------+
+	| IF(4<5, 'yes', 'no') |
+	+----------------------+
+	| yes                  |
+	+----------------------+
+	
+select name, balance ,if(balance>4200, "OK", 'not ok') BALANCE from personal;
+Result:
+	+----------------+---------+---------+
+	| name           | balance | BALANCE |
+	+----------------+---------+---------+
+	| Ankit Kumar    |    3000 | not ok  |
+	| vishal singh   |    4000 | not ok  |
+	| Shashank Raj   |    5000 | OK      |
+	| Ankit Tiwari   |    5000 | OK      |
+	| Nishant Ranjan |    7000 | OK      |
+	| aakash singh   |    9000 | OK      |
+	+----------------+---------+---------+
+	
+-- IFNULL(test,'value') if test is null then return "value" of the test itself
+select IFNULL(null, "mysql");
+Result:
+	+-----------------------+
+	| IFNULL(null, "mysql") |
+	+-----------------------+
+	| mysql                 |
+	+-----------------------+
+
+select IFNULL('Tiger','mysql');
+Result:
+	+-------------------------+
+	| IFNULL('Tiger','mysql') |
+	+-------------------------+
+	| Tiger                   |
+	+-------------------------+
+	
+-- DATABASE() return the current database
+select DATABASE();
+Result:
+	+------------+
+	| DATABASE() |
+	+------------+
+	| friends    |
+	+------------+
+-- VERSION() return the version of mysql database
+select VERSION();
+Result:
+	+-----------+
+	| VERSION() |
+	+-----------+
+	| 8.0.41    |
+	+-----------+
+-- USER() return the current user
+select USER();
+Result:
+	+----------------+
+	| USER()         |
+	+----------------+
+	| root@localhost |
+	+----------------+
+
+select DATABASE() DB, VERSION() VER, USER() USR;
+Result:
+	+---------+--------+----------------+
+	| DB      | VER    | USR            |
+	+---------+--------+----------------+
+	| friends | 8.0.41 | root@localhost |
+	+---------+--------+----------------+
+	
+-- IN operator:
+select * from personal WHERE id=2 OR id=4 OR id=6;
+Result:
+	+----+----------------+-------+----------------+---------+
+	| id | name           | city  | personal_phone | Balance |
+	+----+----------------+-------+----------------+---------+
+	|  2 | Ankit Kumar    | Goa   | 1234           |    3000 |
+	|  4 | Shashank Raj   | Patna | 84389          |    5000 |
+	|  6 | Nishant Ranjan | Patna | 898777         |    7000 |
+	+----+----------------+-------+----------------+---------+
+
+select * from personal WHERE id IN(2, 4,6);
+Result:
+	+----+----------------+-------+----------------+---------+
+	| id | name           | city  | personal_phone | Balance |
+	+----+----------------+-------+----------------+---------+
+	|  2 | Ankit Kumar    | Goa   | 1234           |    3000 |
+	|  4 | Shashank Raj   | Patna | 84389          |    5000 |
+	|  6 | Nishant Ranjan | Patna | 898777         |    7000 |
+	+----+----------------+-------+----------------+---------+
+
+select * from personal WHERE city IN("Patna", 'Gorakhpur');
+Result:
+	+----+----------------+-----------+----------------+---------+
+	| id | name           | city      | personal_phone | Balance |
+	+----+----------------+-----------+----------------+---------+
+	|  3 | vishal singh   | Gorakhpur | 26762          |    4000 |
+	|  4 | Shashank Raj   | Patna     | 84389          |    5000 |
+	|  6 | Nishant Ranjan | Patna     | 898777         |    7000 |
+	|  9 | aakash singh   | gorakhpur | 8989           |    9000 |
+	+----+----------------+-----------+----------------+---------+
+	
+-- LIKE
+
+wildcards:
+
+	% => Represents, zero character or multiple character
+	
+	_ => Represents one character
+	
+	
+select * from personal where name LIKE "a%";
+Result:
+	+----+--------------+-----------+----------------+---------+
+	| id | name         | city      | personal_phone | Balance |
+	+----+--------------+-----------+----------------+---------+
+	|  2 | Ankit Kumar  | Goa       | 1234           |    3000 |
+	|  5 | Ankit Tiwari | Lucknow   | 6387783        |    5000 |
+	|  9 | aakash singh | gorakhpur | 8989           |    9000 |
+	+----+--------------+-----------+----------------+---------+
+	
+select * from personal where name LIKE ('_a%');
+Result:
+	+----+--------------+-----------+----------------+---------+
+	| id | name         | city      | personal_phone | Balance |
+	+----+--------------+-----------+----------------+---------+
+	|  9 | aakash singh | gorakhpur | 8989           |    9000 |
+	+----+--------------+-----------+----------------+---------+
+	
+select * from personal where name LIKE "%KUMAR%";
+Result:
+	+----+-------------+------+----------------+---------+
+	| id | name        | city | personal_phone | Balance |
+	+----+-------------+------+----------------+---------+
+	|  2 | Ankit Kumar | Goa  | 1234           |    3000 |
+	+----+-------------+------+----------------+---------+

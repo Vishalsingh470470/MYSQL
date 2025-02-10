@@ -1,0 +1,179 @@
+MYSQL keys
+
+Primary Key: A Primary Key is a column (or a combination of columns) that uniquely identifies each row in a table. 
+			 It ensures that the column(s) contain unique and non-null values.
+
+Foreign Key: A foreign key is a column (or a set of columns) in a table that establishes a relationship with the primary key of another table.
+			 It enforces referential integrity, ensuring that the values in the foreign key column exist in the referenced primary key column.
+			 
+	
+--create Foreign key
+
+-- while creating table
+create table [laptops](Lid int Primary key, model varchar(255) not null, price int, 
+Pid int,
+FOREIGN KEY(pid) REFERENCES [main_personal] ([main_table_primary_key_id]));
+)
+
+create table laptops(Lid int primary key, model varchar(255) not null, price int);
+Query OK, 0 rows affected (0.06 sec)
+
+show tables;
++-------------------+
+| Tables_in_friends |
++-------------------+
+| laptops           |
+| personal          |
++-------------------+
+
+-- create Foreign key
+
+-- all these foreign key, primary key are constraints we can add and remove later.
+
+--add
+	alter table [table_name] ADD FOREIGN KEY (this_col_name) REFERENCES [parent_table_name](parent_primary_key_col);
+
+alter table laptops ADD pid int;
+
+desc laptops;
+Result:
+	+-------+--------------+------+-----+---------+-------+
+	| Field | Type         | Null | Key | Default | Extra |
+	+-------+--------------+------+-----+---------+-------+
+	| Lid   | int          | NO   | PRI | NULL    |       |
+	| model | varchar(255) | NO   |     | NULL    |       |
+	| price | int          | YES  |     | NULL    |       |
+	| pid   | int          | YES  |     | NULL    |       |
+	+-------+--------------+------+-----+---------+-------+
+	
+alter table laptops ADD FOREIGN KEY(pid) REFERENCES personal (id);
+
+
+desc laptops;
+
+Result:
+	+-------+--------------+------+-----+---------+-------+
+	| Field | Type         | Null | Key | Default | Extra |
+	+-------+--------------+------+-----+---------+-------+
+	| Lid   | int          | NO   | PRI | NULL    |       |
+	| model | varchar(255) | NO   |     | NULL    |       |
+	| price | int          | YES  |     | NULL    |       |
+	| pid   | int          | YES  | MUL | NULL    |       |
+	+-------+--------------+------+-----+---------+-------+
+
+
+insert into laptops values(234, "dell inspiron", 65000, 3), (123, "MACbook pro",90000, 3);
+
+insert into laptops values(274, "MACBOOK Air", 75000, 4), (183, "dell inspiron",90000, 4);
+
+select * from laptops;
+Result:
+	+-----+---------------+-------+------+
+	| Lid | model         | price | pid  |
+	+-----+---------------+-------+------+
+	| 123 | MACbook pro   | 90000 |    3 |
+	| 183 | dell inspiron | 60000 |    3 |
+	| 234 | dell inspiron | 65000 |    4 |
+	| 274 | MACBOOK Air   | 75000 |    4 |
+	+-----+---------------+-------+------+
+	
+	
+create table qualifications(
+    qid int AUTO_increment primary key,
+    name varchar(500) not null,
+    about varchar(255),
+    pid int,
+    FOREIGN KEY (pid) REFERENCES personal(id)
+    );
+	
+alter table qualifications add column pass_year varchar(4) not null;
+
+desc qualifications;
+Result:
+	+-----------+--------------+------+-----+---------+----------------+
+	| Field     | Type         | Null | Key | Default | Extra          |
+	+-----------+--------------+------+-----+---------+----------------+
+	| qid       | int          | NO   | PRI | NULL    | auto_increment |
+	| name      | varchar(500) | NO   |     | NULL    |                |
+	| about     | varchar(255) | YES  |     | NULL    |                |
+	| pid       | int          | YES  | MUL | NULL    |                |
+	| pass_year | varchar(4)   | NO   |     | NULL    |                |
+	+-----------+--------------+------+-----+---------+----------------+
+	
+
+insert into qualifications values(2,'BTech', 'CUSAT', 2, "2010"), (2,"MBA", "IIFT", 2, "2012");
+
+select * from qualifications;
+Result:
+	+-----+-------+-------+------+-----------+
+	| qid | name  | about | pid  | pass_year |
+	+-----+-------+-------+------+-----------+
+	|   1 | BTech | CUSAT |    2 | 2010      |
+	|   2 | MBA   | IIFT  |    2 | 2012      |
+	+-----+-------+-------+------+-----------+
+	
+--drop
+	alter table [tablename] DROP FOREIGN KEY [Constraint name];
+	
+	
+	
+-- JOIN when we have to fetch data from mltiple tables
+
+-- SIMPLE JOIN: Equi Join
+	Select personal.name, personal.city, laptops.model, laptops.price from personal, laptops WHERE personal.id=laptops.pid;
+	Result:
+		+--------------+-----------+---------------+-------+
+		| name         | city      | model         | price |
+		+--------------+-----------+---------------+-------+
+		| vishal singh | Gorakhpur | MACbook pro   | 90000 |
+		| vishal singh | Gorakhpur | dell inspiron | 60000 |
+		| Shashank Raj | Patna     | dell inspiron | 65000 |
+		| Shashank Raj | Patna     | MACBOOK Air   | 75000 |
+		| Ankit Kumar  | Goa       | MACBOOK Air   | 80000 |
+		+--------------+-----------+---------------+-------+
+	Example with alias
+	 Select p.name, p.city, l.model, l.price from personal p, laptops l WHERE p.id=l.pid;
+	 Result:
+		+--------------+-----------+---------------+-------+
+		| name         | city      | model         | price |
+		+--------------+-----------+---------------+-------+
+		| vishal singh | Gorakhpur | MACbook pro   | 90000 |
+		| vishal singh | Gorakhpur | dell inspiron | 60000 |
+		| Shashank Raj | Patna     | dell inspiron | 65000 |
+		| Shashank Raj | Patna     | MACBOOK Air   | 75000 |
+		| Ankit Kumar  | Goa       | MACBOOK Air   | 80000 |
+		+--------------+-----------+---------------+-------+
+	Example 2 table foreign keys
+	 Select personal.name, personal.city, laptops.model, laptops.price, q.name, q.pass_year from personal, laptops, qualifications q WHERE personal.id=laptops.pid and personal.id=q.pid;
+	 Result:
+	 	+-------------+------+-------------+-------+-------+-----------+
+		| name        | city | model       | price | name  | pass_year |
+		+-------------+------+-------------+-------+-------+-----------+
+		| Ankit Kumar | Goa  | MACBOOK Air | 80000 | MBA   | 2012      |
+		| Ankit Kumar | Goa  | MACBOOK Air | 80000 | BTech | 2010      |
+		+-------------+------+-------------+-------+-------+-----------+
+		
+-- INNER JOIN: Inner join and Equi join give same result
+	select p.name, p.city, l.model, l.price from personal p INNER JOIN laptops l ON p.id=l.pid;
+	Result:
+		+--------------+-----------+---------------+-------+
+		| name         | city      | model         | price |
+		+--------------+-----------+---------------+-------+
+		| vishal singh | Gorakhpur | MACbook pro   | 90000 |
+		| vishal singh | Gorakhpur | dell inspiron | 60000 |
+		| Shashank Raj | Patna     | dell inspiron | 65000 |
+		| Shashank Raj | Patna     | MACBOOK Air   | 75000 |
+		| Ankit Kumar  | Goa       | MACBOOK Air   | 80000 |
+		+--------------+-----------+---------------+-------+
+		
+	select p.name, p.city, l.model, l.price, q.name, q.pass_year from personal p INNER JOIN laptops l on p.id=l.pid INNER JOIN qualifications q on p.id=q.pid;
+	Result:
+		+-------------+------+-------------+-------+-------+-----------+
+		| name        | city | model       | price | name  | pass_year |
+		+-------------+------+-------------+-------+-------+-----------+
+		| Ankit Kumar | Goa  | MACBOOK Air | 80000 | MBA   | 2012      |
+		| Ankit Kumar | Goa  | MACBOOK Air | 80000 | BTech | 2010      |
+		+-------------+------+-------------+-------+-------+-----------+
+	
+		
+		

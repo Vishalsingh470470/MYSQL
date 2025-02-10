@@ -1,0 +1,160 @@
+MYSQL Triggers
+
+There are 6 types of triggers
+
+	1. Before Insert
+	2. After Insert
+	3. Before Update
+	4. After Update
+	5. Before Update
+	6. After Update
+	
+
+USE CASE 1:
+
+create table user(
+user_id int primary key,
+name varchar(255),
+per_hour_salary int default 0,
+working_hour int default 0,
+total_salary int default 0
+);
+
+insert into user(user_id, name, per_hour_salary, working_hour) 
+values(1, 'Ankit Kumar',  1000, 6);
+
+select * from user;
+
+-- Before Insert
+
+
+delimiter //
+
+create trigger before_insert_user
+before insert
+on user for each row
+begin
+
+set NEW.total_salary = NEW.per_hour_salary * NEW.working_hour;
+
+end; //
+
+delimiter ;
+
+-- we will find new option triggers in our workbench
+
+insert into user(user_id, name, per_hour_salary, working_hour) 
+values(2, 'Shashank raj',  4000, 6);
+
+select * from user;
+
+Result:
+	+---------+--------------+-----------------+--------------+--------------+
+	| user_id | name         | per_hour_salary | working_hour | total_salary |
+	+---------+--------------+-----------------+--------------+--------------+
+	|       1 | Ankit Kumar  |            1000 |            6 |            0 |
+	|       2 | Shashank raj |            4000 |            6 |        24000 |
+	+---------+--------------+-----------------+--------------+--------------+
+
+insert into user(user_id, name, per_hour_salary, working_hour) value(3, "vishal singh", 1000, 60);
+select * from user;
++---------+--------------+-----------------+--------------+--------------+
+| user_id | name         | per_hour_salary | working_hour | total_salary |
++---------+--------------+-----------------+--------------+--------------+
+|       1 | Ankit Kumar  |            1000 |            6 |            0 |
+|       2 | Shashank raj |            4000 |            6 |        24000 |
+|       3 | vishal singh |            1000 |           60 |        60000 |
++---------+--------------+-----------------+--------------+--------------+
+	
+	
+	New Rows							Old Rows
+	
+	new rows and old rows uses are depends on type of trigger
+	
+	Insert >>>>
+				New rows access
+				
+	Update >>>>
+				New and Old rows access
+				
+	Delete >>>>
+				Old rows access
+				
+				
+-- create update trigger
+delimiter //
+
+create trigger before_update_user
+before update
+on user for each row
+begin
+set NEW.total_salary = NEW.per_hour_salary * NEW.working_hour;
+end //
+
+delimiter ;
+
+update user set working_hour=11, per_hour_salary=2000 where user_id=1;
+
+select * from user;
+Result:
+	+---------+--------------+-----------------+--------------+--------------+
+	| user_id | name         | per_hour_salary | working_hour | total_salary |
+	+---------+--------------+-----------------+--------------+--------------+
+	|       1 | Ankit Kumar  |            2000 |           11 |        22000 |
+	|       2 | Shashank raj |            4000 |            6 |        24000 |
+	|       3 | vishal singh |            1000 |           60 |        60000 |
+	+---------+--------------+-----------------+--------------+--------------+
+
+
+
+USE CASE 2:
+
+	1. Update acc_count ::::: account create
+	2. Update acc_count ::::: account close
+	
+	
+create table accounts(
+
+account_no int primary key,
+user_id int,
+balance int default 0
+
+);
+
+select * from accounts;
+
+alter table user add column acc_count int default 0;
+
+select * from user;
+Result:
+	+---------+--------------+-----------------+--------------+--------------+-----------+
+	| user_id | name         | per_hour_salary | working_hour | total_salary | acc_count |
+	+---------+--------------+-----------------+--------------+--------------+-----------+
+	|       1 | Ankit Kumar  |            2000 |           11 |        22000 |         0 |
+	|       2 | Shashank raj |            4000 |            6 |        24000 |         0 |
+	|       3 | vishal singh |            1000 |           60 |        60000 |         0 |
+	+---------+--------------+-----------------+--------------+--------------+-----------+
+	
+delimiter //
+
+create trigger before_open_account
+before insert
+on accounts for each row
+begin
+update user set acc_count =acc_count +1 where user_id = new.user_id;
+end ; //
+delimiter ;	
+	
+	
+	
+insert into accounts (account_no, user_id, balance) values(2001, 1, 10000);
+select * from user;
+
+select * from user;
++---------+--------------+-----------------+--------------+--------------+-----------+
+| user_id | name         | per_hour_salary | working_hour | total_salary | acc_count |
++---------+--------------+-----------------+--------------+--------------+-----------+
+|       1 | Ankit Kumar  |            2000 |           11 |        22000 |         1 |
+|       2 | Shashank raj |            4000 |            6 |        24000 |         0 |
+|       3 | vishal singh |            1000 |           60 |        60000 |         0 |
++---------+--------------+-----------------+--------------+--------------+-----------+
